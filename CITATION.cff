@@ -1,0 +1,25 @@
+cff-version: 1.2.0
+message: "If you use this framework, please cite the accompanying NeurIPS 2026 paper."
+title: "TIDE/TIDES: Interactive 4D Volumetric Liquid Forecasting"
+type: software
+version: 0.1.0
+authors:
+  - family-names: Ryu
+    given-names: Jongwon
+  - family-names: Yoon
+    given-names: Sunjae
+  - family-names: Kim
+    given-names: Junyeong
+repository-code: "https://github.com/jongwonryu/TIDE-TIDES"
+preferred-citation:
+  type: conference-paper
+  title: "Interactive 4D Volumetric Liquid Forecasting under Moving-Solid Interaction"
+  authors:
+    - family-names: Ryu
+      given-names: Jongwon
+    - family-names: Yoon
+      given-names: Sunjae
+    - family-names: Kim
+      given-names: Junyeong
+  year: 2026
+  collection-title: "Advances in Neural Information Processing Systems"

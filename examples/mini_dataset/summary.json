@@ -1,0 +1,36 @@
+{
+  "dataset_name": "dualsph_liquid_v2_dense_compact_example",
+  "num_samples": 1,
+  "split_counts": {
+    "train": 1
+  },
+  "sample_file": "samples/train/existing_sample_compact.npz",
+  "surface_state_file": "raw/existing_surface_state_compact.npz",
+  "source_dataset": "dualsph_liquid_v2_dense",
+  "source_sample_file": "samples/train/0000004_rigidv1_tpl_straight_constant_0020.npz",
+  "source_case_id": "rigidv1_tpl_straight_constant_0020",
+  "source_split": "train",
+  "source_template_name": "tpl_straight_constant",
+  "source_labels": {
+    "shape": "straight",
+    "speed_profile": "constant"
+  },
+  "source_num_frames": 88,
+  "source_grid_dhw": [
+    32,
+    128,
+    128
+  ],
+  "compact_time_frames": 12,
+  "compact_grid_dhw": [
+    16,
+    32,
+    32
+  ],
+  "spatial_downsample": {
+    "D": 2,
+    "H": 4,
+    "W": 4
+  },
+  "note": "This compact example is extracted from an existing generated dataset sample, with temporal truncation and spatial downsampling for supplementary distribution."
+}

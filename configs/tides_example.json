@@ -1,0 +1,134 @@
+{
+  "dataset": {
+    "root": "examples/mini_dataset",
+    "manifest": "manifest.jsonl",
+    "train_split": "train",
+    "val_split": "train",
+    "valid_status": [
+      "ok",
+      "skipped_existing"
+    ],
+    "rollout_steps": 2,
+    "velocity_scale": 8.0,
+    "load_particle_gt": true,
+    "particle_gt_num_points": 16,
+    "object_patch_size": 8,
+    "canonical_object_patches": true,
+    "max_episode_cache": 1,
+    "max_train_episodes": 1,
+    "max_val_episodes": 1,
+    "include_gas_channel": false
+  },
+  "model": {
+    "name": "InteractionAwareHybrid4DFlowPredictor",
+    "fluid_input_channels": 3,
+    "latent_channels": 8,
+    "control_dim": 0,
+    "control_channels": 0,
+    "base_width": 4,
+    "blocks_per_stage": 1,
+    "num_object_types": 3,
+    "interface_input_channels": 10,
+    "coupling_variant": "strict_mediator",
+    "direct_obj_to_fluid_scale": 0.0,
+    "direct_fluid_to_obj_scale": 0.0,
+    "exchange_reaction_scale": 1.0,
+    "pressure_correction_scale": 0.2,
+    "dual_coupling_enabled": true,
+    "dual_particle_step_scale": 1.0,
+    "dual_p2g_scale": 0.2,
+    "predict_phase": true,
+    "num_phase_channels": 2,
+    "predict_pressure": false,
+    "geo_interface_condition_scale": 1.0,
+    "geo_operator_init_scale": 0.1,
+    "object_geometry_stream_scale": 1.25,
+    "pressure_post_p2g_enabled": true,
+    "pressure_post_p2g_scale": 1.0,
+    "output_pressure_correction_enabled": true,
+    "output_pressure_correction_scale": 0.1,
+    "output_pressure_feedback_scale": 0.1
+  },
+  "train": {
+    "seed": 20260415,
+    "use_cuda": true,
+    "batch_size": 1,
+    "num_workers": 0,
+    "pin_memory": false,
+    "epochs": 1,
+    "lr": 0.0001,
+    "weight_decay": 1e-06,
+    "scheduler_step_size": 5,
+    "scheduler_gamma": 0.9,
+    "log_interval": 20,
+    "show_progress_bar": false,
+    "progress_bar_width": 30,
+    "checkpoint_every_steps": 0,
+    "rollout_curriculum": {
+      "enabled": false,
+      "apply_to_val": false,
+      "schedule": [
+        {
+          "until_epoch": 5,
+          "rollout_steps": 2
+        },
+        {
+          "until_epoch": 10,
+          "rollout_steps": 4
+        },
+        {
+          "until_epoch": 20,
+          "rollout_steps": 8
+        }
+      ]
+    },
+    "max_train_steps": 1,
+    "max_val_steps": 1,
+    "output_dir": "outputs/tides_example",
+    "val_ablation_pressure_off": false,
+    "val_ablation_geo_zero": false,
+    "val_ablation_geo_shuffle": false,
+    "cond_variant": "hybrid"
+  },
+  "loss_weights": {
+    "lambda_vel": 1.0,
+    "lambda_grad": 0.2,
+    "lambda_div": 0.1,
+    "lambda_traj": 0.5,
+    "lambda_int": 0.2,
+    "lambda_roll": 0.5,
+    "lambda_phase": 0.1,
+    "lambda_dual": 0.5,
+    "lambda_exchange": 0.1,
+    "lambda_particle_module": 0.2
+  },
+  "loss": {
+    "velocity_norm": "l1",
+    "gradient_norm": "l1",
+    "vorticity_weight": 0.1,
+    "trajectory_norm": "l2",
+    "trajectory_step_mode": "displacement",
+    "trajectory_num_points": 16,
+    "near_interface_threshold": 0.2,
+    "far_interface_threshold": 0.9,
+    "rollout_gamma": 1.0,
+    "interface_reweight": {
+      "enabled": true,
+      "mode": "object_sdf",
+      "alpha": 2.0,
+      "clip": 6.0,
+      "sigma": 0.25
+    },
+    "interface": {
+      "boundary_velocity_weight": 1.0,
+      "no_penetration_weight": 1.0,
+      "normal_consistency_weight": 1.0,
+      "phase_grad_focus_threshold": 0.02
+    },
+    "use_fluid_mask_for_near_far": true,
+    "auto_quantile_fallback": true,
+    "near_quantile": 0.25,
+    "far_quantile": 0.75,
+    "near_far_max_overlap": 0.2
+  }
+}

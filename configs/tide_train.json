@@ -1,0 +1,123 @@
+{
+  "dataset": {
+    "root": "datasets/dualsph_liquid_v2_dense",
+    "manifest": "manifest.jsonl",
+    "train_split": "train",
+    "val_split": "val",
+    "valid_status": [
+      "ok",
+      "skipped_existing"
+    ],
+    "rollout_steps": 8,
+    "velocity_scale": 8.0,
+    "load_particle_gt": true,
+    "particle_gt_num_points": 256,
+    "object_patch_size": 16,
+    "canonical_object_patches": true,
+    "max_episode_cache": 1,
+    "max_train_episodes": 0,
+    "max_val_episodes": 0,
+    "include_gas_channel": false
+  },
+  "model": {
+    "name": "BulkInterfaceResponse4DFlowPredictor",
+    "fluid_input_channels": 3,
+    "latent_channels": 32,
+    "control_dim": 0,
+    "control_channels": 0,
+    "base_width": 16,
+    "blocks_per_stage": 2,
+    "predict_phase": false,
+    "num_phase_channels": 2,
+    "predict_pressure": false,
+    "interface_hidden_channels": 32,
+    "interface_band_width": 0.35,
+    "pressure_correction_scale": 0.2,
+    "particle_step_scale": 1.0,
+    "use_projection": true,
+    "use_object_patch_context": true,
+    "global_interface_response": false
+  },
+  "train": {
+    "seed": 20260415,
+    "use_cuda": true,
+    "batch_size": 1,
+    "num_workers": 0,
+    "pin_memory": false,
+    "epochs": 20,
+    "lr": 0.0001,
+    "weight_decay": 1e-06,
+    "scheduler_step_size": 5,
+    "scheduler_gamma": 0.9,
+    "log_interval": 20,
+    "show_progress_bar": true,
+    "progress_bar_width": 30,
+    "checkpoint_every_steps": 2000,
+    "rollout_curriculum": {
+      "enabled": true,
+      "apply_to_val": false,
+      "schedule": [
+        {
+          "until_epoch": 5,
+          "rollout_steps": 2
+        },
+        {
+          "until_epoch": 10,
+          "rollout_steps": 4
+        },
+        {
+          "until_epoch": 20,
+          "rollout_steps": 8
+        }
+      ]
+    },
+    "max_train_steps": 500,
+    "max_val_steps": 20,
+    "output_dir": "outputs/tide",
+    "val_ablation_pressure_off": false,
+    "val_ablation_geo_zero": false,
+    "val_ablation_geo_shuffle": false,
+    "cond_variant": "hybrid"
+  },
+  "loss_weights": {
+    "lambda_vel": 1.0,
+    "lambda_grad": 0.2,
+    "lambda_div": 0.1,
+    "lambda_traj": 0.5,
+    "lambda_int": 0.2,
+    "lambda_roll": 0.5,
+    "lambda_phase": 0.0,
+    "lambda_dual": 0.0,
+    "lambda_exchange": 0.0,
+    "lambda_particle_module": 0.0
+  },
+  "loss": {
+    "velocity_norm": "l1",
+    "gradient_norm": "l1",
+    "vorticity_weight": 0.0,
+    "trajectory_norm": "l2",
+    "trajectory_step_mode": "displacement",
+    "trajectory_num_points": 256,
+    "near_interface_threshold": 0.2,
+    "far_interface_threshold": 0.9,
+    "rollout_gamma": 1.0,
+    "interface_reweight": {
+      "enabled": true,
+      "mode": "object_sdf",
+      "alpha": 2.0,
+      "clip": 6.0,
+      "sigma": 0.25
+    },
+    "interface": {
+      "boundary_velocity_weight": 1.0,
+      "no_penetration_weight": 1.0,
+      "normal_consistency_weight": 0.0,
+      "phase_grad_focus_threshold": 0.02
+    },
+    "use_fluid_mask_for_near_far": true,
+    "auto_quantile_fallback": true,
+    "near_quantile": 0.25,
+    "far_quantile": 0.75,
+    "near_far_max_overlap": 0.2
+  }
+}
